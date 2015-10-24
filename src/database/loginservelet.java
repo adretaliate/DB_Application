@@ -68,6 +68,7 @@ public class loginservelet extends HttpServlet {
 						Integer con=Integer.parseInt(contact);
 						if(password.equals(repassword)){
 							login.register(name, username, email, address, con, password, option);
+							response.sendRedirect("loginpage.jsp");
 						}
 						else{
 							RequestDispatcher rd = getServletContext().getRequestDispatcher("/register.jsp");
