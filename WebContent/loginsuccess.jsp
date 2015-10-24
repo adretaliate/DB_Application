@@ -28,18 +28,19 @@ if(cookies!=null){
 <h1>Welcome to eMarket</h1><p align="right">Hello, <%=username %>
 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href="www.google.com" >Your Orders</a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href="prodservelet?action=logout">Log Out</a></p>
 <%if(id!=0){
-	List<String> prods = product.products(id);
+	HashMap<String, String> prods = product.products(id);
 	%>
 	<table width="700"><tr><td><b>Product Name</td><td><b>Price</td></td></tr>
 	<form action="">
 	<%
-	for(String prod : prods){
-	%><tr><td><input type="checkbox" name="product" value="Bike"><%=prod%><br></td><td>250</td></tr><%
+	for(String prod : prods.keySet()){
+	%><tr><td><input type="checkbox" name="product" value="Bike"><%=prod%><br></td><td><%=prods[prod]%></td></tr><%
 	}
 }
 %>
 <br>
 <br>
 <br>
+<a href="prodservelet?action=prev" >Prev.</a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href="prodservelet?action=next" >Next</a>
 </body>
 </html>
