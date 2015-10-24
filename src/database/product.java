@@ -126,7 +126,7 @@ public class product {
 			
 			if(rs.next())
 			{
-				pstmt = connection.prepareStatement("update cart set quantity = quantity+1 where customerID=? and sellerID=? and productID =? ");
+				pstmt = connection.prepareStatement("update cart set cartquantity = cartquantity+1 where customerID=? and sellerID=? and productID =? ");
 				pstmt.setString(1,customerID);
 				pstmt.setString(2,sellerID);
 				pstmt.setInt(3,Integer.parseInt(productID));System.out.println("add to cart");
@@ -148,6 +148,39 @@ public class product {
 		} finally{
 			closeConnection(connection);
 		}
+	}
+	
+	public static ArrayList<ArrayList<String>> getCart(String customerID){
+		ArrayList<ArrayList<String>> cart = new ArrayList<ArrayList<String>>();
+		Connection connection =null;
+		try{
+			connection = getConnection();
+			PreparedStatement pstmt;
+			pstmt = connection.prepareStatement(" select * from product natural join productdescription natural join cart where customerID=?");
+			pstmt.setString(1, customerID);
+			ResultSet rs = pstmt.executeQuery();
+			
+			while(rs.next()){
+				ArrayList<String> item= new ArrayList<String>();
+				String productName, discounted_price, cartquantity, price, discount;
+				productName = rs.getString(7);
+				price = rs.getString(3);
+				discount = rs.getString(5);
+				discounted_price = Double.toString(Double.parseDouble(price)*(1-Double.parseDouble(discount)/100));
+				cartquantity = rs.getString(11);
+				
+				item.add(productName);
+				item.add(discounted_price);
+				item.add(cartquantity);
+				cart.add(item);
+			}
+			
+		}catch(SQLException sqle){
+			System.out.println("SQL exception during getCart");
+		} finally{
+			closeConnection(connection);
+		}
+		return cart;
 	}
  	
 	static Connection getConnection() {
