@@ -64,6 +64,64 @@ public class product {
 		
 	}
 	
+	public static ArrayList<ArrayList<String>> getSellers(String productID)
+	{
+		ArrayList<ArrayList<String>> sellers = new ArrayList<ArrayList<String>>();
+		Connection connection =null;
+		try{
+			connection = getConnection();
+			PreparedStatement pstmt;
+			pstmt = connection.prepareStatement("select seller.name, product.price, product.discount, seller.username from product natural join seller where productID=?");
+			pstmt.setString(1,productID);
+			
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next())
+			{
+				ArrayList<String> seller= new ArrayList<String>();
+				String name,price,discount,username,discounted_price;
+				name = rs.getString(1);
+				price = rs.getString(2);
+				discount = rs.getString(3);
+				username = rs.getString(4);
+				discounted_price = Double.toString(Double.parseDouble(price)*(1-Double.parseDouble(discount)/100));
+				
+				seller.add(name);
+				seller.add(price);
+				seller.add(discount);
+				seller.add(discounted_price);
+				seller.add(username);
+				
+				sellers.add(seller);
+				
+				
+			}
+			
+		}catch(SQLException sqle){
+			System.out.println("SQL exception during getSellers");
+		} finally{
+			closeConnection(connection);
+		}
+		return sellers;
+	}
+	
+	public static void addToCart(String customerID, String productID, String sellerID)
+	{
+		Connection connection =null;
+		try{
+			PreparedStatement pstmt;
+			pstmt = connection.prepareStatement("insert into cart values(?,?,?,1) On conflict (customerID, productID,sellerID) DO Update SET quantity = cart.quantity+1");
+			pstmt.setString(1,customerID);
+			pstmt.setString(2,sellerID);
+			pstmt.setString(3,productID);
+			pstmt.executeUpdate();
+			
+		}catch(SQLException sqle){
+			System.out.println("SQL exception during getSellers");
+		} finally{
+			closeConnection(connection);
+		}
+	}
+ 	
 	static Connection getConnection() {
 		String dbURL = "jdbc:postgresql://10.105.1.12/cs387";
         String dbUser = "db130050060";
