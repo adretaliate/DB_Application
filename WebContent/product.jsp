@@ -28,7 +28,7 @@ if(cookies!=null){
 String productID=request.getParameter("productID");
 ArrayList<ArrayList<String> > sellers = product.getSellers(productID);
 %>
-<form action="prodservelet?action=<%=productID%>" method="post">
+<form action="prodservelet?productID=<%=productID%>" method="post">
 <table width="700"><tr><td><b>SellerName</td><td><b>Price</td><td><b>Discount</td><td><b>Discounted Price</td></tr>
 
 <%
