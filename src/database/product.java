@@ -196,11 +196,12 @@ public class product {
 					+ "customerID=? and sellerID=? and productID=?");
 			pstmt.setString(1, customerID);
 			pstmt.setString(2, sellerID);
-			pstmt.setString(3, productID);
+			pstmt.setInt(3,Integer.parseInt(productID));
 			pstmt.executeUpdate();
 			
 		}catch(SQLException sqle){
-			System.out.println("SQL exception during getCart");
+			System.out.println("SQL exception during delete");
+			System.out.println(sqle);
 		} finally{
 			closeConnection(connection);
 		}
@@ -216,11 +217,11 @@ public class product {
 			pstmt.setInt(1, quantity);
 			pstmt.setString(2, customerID);
 			pstmt.setString(3, sellerID);
-			pstmt.setString(4, productID);
+			pstmt.setInt(4,Integer.parseInt(productID));
 			pstmt.executeUpdate();
 			
 		}catch(SQLException sqle){
-			System.out.println("SQL exception during getCart");
+			System.out.println("SQL exception during updateCart");
 		} finally{
 			closeConnection(connection);
 		}
