@@ -29,13 +29,13 @@ if(cookies!=null){
 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href="www.google.com" >Your Orders</a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href="prodservelet?action=logout">Log Out</a></p>
 <form action="prodservelet?action=place_order" method="post">
 <%if(id!=0){
-	HashMap<String, String> prods = product.products(id);
+	ArrayList<ArrayList<String>> prods = product.products(id);
 	%>
 	<table width="700"><tr><td><b>Product Name</td><td><b>Price</td></td></tr>
 	
 	<%
-	for(String prod : prods.keySet()){
-	%><tr><td><a href="prodservelet?action=viewInfo"><%=prod%><br></td><td><%=prods.get(prod)%></td></tr><%
+	for(ArrayList<String> prod : prods){
+	%><tr><td><a href="product.jsp?produdctID=<%=prod.get(0) %>" ><%=prod.get(1)%><br></td><td><%=prod.get(2)%></td></tr><%
 	}
 }
 %>
