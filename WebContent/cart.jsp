@@ -47,7 +47,7 @@ if(cookies!=null){
 <br>
 
 <form action="prodservelet?action=place_order" method="post">
-	<button type="submit" name="delete" value="<%=prod.get(3)%> <%=prod.get(4)%>">Delete item</button></td><td><button type="submit" name="edit" value="<%=prod.get(3)%> <%=prod.get(4)%>">Edit item</button>
+	<button type="submit" name="place_order">Place Order</button>
 </form>
 
 </body>
