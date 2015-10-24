@@ -34,7 +34,7 @@ if(cookies!=null){
 	<form action="">
 	<%
 	for(String prod : prods.keySet()){
-	%><tr><td><input type="checkbox" name="product" value="Bike"><%=prod%><br></td><td><%=prods[prod]%></td></tr><%
+	%><tr><td><input type="checkbox" name="product" value="Bike"><%=prod%><br></td><td><%=prods.get(prod)%></td></tr><%
 	}
 }
 %>
