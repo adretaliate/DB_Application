@@ -94,7 +94,39 @@ public class prodservelet extends HttpServlet {
                     .getRequestDispatcher("/loginsuccess.jsp");
             requestDispatcher.forward(request, response);
 		}
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		String action = request.getParameter("action");
+		if(action==null){
+			String productID = request.getParameter("productID");
+			String sellerID = request.getParameter("addtocart");
+			Cookie[] cookies = request.getCookies();
+			System.out.println("prodservelet");
+			System.out.println(productID);
+			System.out.println(sellerID);
+			String username=null;
+			for(Cookie cookie:cookies){
+				if(cookie.getName().equals("username")){
+					username=cookie.getValue();
+				}
+			}
+			System.out.println(username);
+			product.addToCart(username, productID, sellerID);
+			System.out.println(username);
+			PrintWriter out=response.getWriter();
+			response.sendRedirect("loginsuccess.jsp");  
+	//		RequestDispatcher rd = getServletContext().getRequestDispatcher("/loginsuccess.jsp");
+	//        out = response.getWriter();
+	//        out.println("<html><center><font color=red>Item added to Cart</font></center></html>\n");
+	//        rd.include(request, response);
+		}
 		else if(action.equals("edit_or_delete")){
+			System.out.println("link error");
 			String edit=request.getParameter("edit");
 			String delete=request.getParameter("delete");
 			Cookie[] cookies = request.getCookies();
@@ -109,11 +141,7 @@ public class prodservelet extends HttpServlet {
 			if(delete!=null){
 				String[] split = delete.split(" ");
 				product.delete(username, split[1], split[0]);
-				PrintWriter out=response.getWriter();
-				RequestDispatcher rd = getServletContext().getRequestDispatcher("/cart.jsp");
-		        out = response.getWriter();
-		        out.println("<html><center><font color=red>Item deleted</font></center></html>\n");
-		        rd.include(request, response);
+				response.sendRedirect("cart.jsp");
 			}
 			else if(edit!=null){
 				String[] split = edit.split(" ");
@@ -124,42 +152,9 @@ public class prodservelet extends HttpServlet {
 				else{
 					product.delete(username, split[1], split[0]);
 				}
-				PrintWriter out=response.getWriter();
-				RequestDispatcher rd = getServletContext().getRequestDispatcher("/cart.jsp");
-		        out = response.getWriter();
-		        out.println("<html><center><font color=red>Item updated</font></center></html>\n");
-		        rd.include(request, response);
+				response.sendRedirect("cart.jsp");
 			}
 		}
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		String productID = request.getParameter("action");
-		String sellerID = request.getParameter("addtocart");
-		Cookie[] cookies = request.getCookies();
-		System.out.println("prodservelet");
-		System.out.println(productID);
-		System.out.println(sellerID);
-		String username=null;
-		for(Cookie cookie:cookies){
-			if(cookie.getName().equals("username")){
-				username=cookie.getValue();
-			}
-		}
-		System.out.println(username);
-		product.addToCart(username, productID, sellerID);
-		System.out.println(username);
-		PrintWriter out=response.getWriter();
-		response.sendRedirect("loginsuccess.jsp");  
-//		RequestDispatcher rd = getServletContext().getRequestDispatcher("/loginsuccess.jsp");
-//        out = response.getWriter();
-//        out.println("<html><center><font color=red>Item added to Cart</font></center></html>\n");
-//        rd.include(request, response);
-		
 	}
 
 }
