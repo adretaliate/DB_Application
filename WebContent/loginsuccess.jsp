@@ -26,7 +26,7 @@ if(cookies!=null){
 }
 %>
 <h1>Welcome to eMarket</h1><p align="right">Hello, <%=username %>
-&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href="www.google.com" >Your Orders</a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href="prodservelet" action="logout">Log Out</a></p>
+&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href="www.google.com" >Your Orders</a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href="prodservelet?action=logout">Log Out</a></p>
 <%if(id!=0){
 	List<String> prods = product.products(id);
 	%>
