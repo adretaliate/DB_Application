@@ -181,6 +181,7 @@ public class prodservelet extends HttpServlet {
 				product.delete(username, pack.get(4), pack.get(3));
 				
 			}
+			response.sendRedirect("loginsuccess.jsp");
 			
 		}
 	}
