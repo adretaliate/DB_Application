@@ -111,15 +111,40 @@ public class product {
 	{
 		Connection connection =null;
 		try{
+			connection = getConnection();
+			
+			System.out.println("add to cart");
+			System.out.println(customerID);
+			System.out.println(productID);
+			System.out.println(sellerID);
 			PreparedStatement pstmt;
-			pstmt = connection.prepareStatement("insert into cart values(?,?,?,1) On conflict (customerID, productID,sellerID) DO Update SET quantity = cart.quantity+1");
+			pstmt =  connection.prepareStatement("select * from cart where customerID=? and sellerID=? and productID =? ");
 			pstmt.setString(1,customerID);
 			pstmt.setString(2,sellerID);
-			pstmt.setString(3,productID);
-			pstmt.executeUpdate();
+			pstmt.setInt(3,Integer.parseInt(productID));System.out.println("add to cart");
+			ResultSet rs=pstmt.executeQuery(); System.out.println("add to cart");
+			
+			if(rs.next())
+			{
+				pstmt = connection.prepareStatement("update cart set quantity = quantity+1 where customerID=? and sellerID=? and productID =? ");
+				pstmt.setString(1,customerID);
+				pstmt.setString(2,sellerID);
+				pstmt.setInt(3,Integer.parseInt(productID));System.out.println("add to cart");
+				pstmt.executeUpdate();
+			}
+			else 
+			{
+				pstmt = connection.prepareStatement("insert into cart values(?,?,?,1)");
+				pstmt.setString(1,customerID);
+				pstmt.setString(2,sellerID);
+				pstmt.setInt(3,Integer.parseInt(productID));
+				pstmt.executeUpdate();
+			}
+			
+			
 			
 		}catch(SQLException sqle){
-			System.out.println("SQL exception during getSellers");
+			System.out.println("SQL exception during addToCart");
 		} finally{
 			closeConnection(connection);
 		}
