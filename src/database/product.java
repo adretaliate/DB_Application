@@ -24,14 +24,17 @@ public class product {
 			
 			ResultSet rs=pstmt.executeQuery();
 			while(rs.next()){
+				System.out.println(rs.getString(2));
 				pstmt1 = connection.prepareStatement("select min(price) from product where productID=?");
 				pstmt1.setInt(1, Integer.parseInt(rs.getString(1)));
 				ResultSet rs1 = pstmt1.executeQuery();
+				rs1.next();
+				System.out.println(rs1.getString(1));
 				prods.put(rs.getString(2),rs1.getString(1));
 			}
 			
 		} catch(SQLException sqle){
-			System.out.println("SQL exception during registration");
+			System.out.println("SQL exception during product fetching");
 		} finally{
 			System.out.println("Came here1");
 			closeConnection(connection);
