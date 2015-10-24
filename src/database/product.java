@@ -5,7 +5,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -57,6 +60,46 @@ public class product {
 			
 		}catch(SQLException sqle){
 			System.out.println("SQL exception during getMaxProductId");
+		} finally{
+			closeConnection(connection);
+		}
+		return num;
+		
+	}
+	
+	public static Integer getMaxPackageId()
+	{
+		Integer num=0;
+		Connection connection=null;
+		try{
+			connection = getConnection();
+			PreparedStatement pstmt;
+			pstmt = connection.prepareStatement("select max(packageID) from package");
+			ResultSet rs = pstmt.executeQuery();
+			num  = rs.getInt(1);
+			
+		}catch(SQLException sqle){
+			System.out.println("SQL exception during getMaxPackageId");
+		} finally{
+			closeConnection(connection);
+		}
+		return num;
+		
+	}
+	
+	public static Integer getMaxOrderId()
+	{
+		Integer num=0;
+		Connection connection=null;
+		try{
+			connection = getConnection();
+			PreparedStatement pstmt;
+			pstmt = connection.prepareStatement("select max(orderID) from orders");
+			ResultSet rs = pstmt.executeQuery();
+			num  = rs.getInt(1);
+			
+		}catch(SQLException sqle){
+			System.out.println("SQL exception during getMaxOrderId");
 		} finally{
 			closeConnection(connection);
 		}
@@ -222,6 +265,64 @@ public class product {
 			
 		}catch(SQLException sqle){
 			System.out.println("SQL exception during updateCart");
+		} finally{
+			closeConnection(connection);
+		}
+	}
+	
+	public static void insertPackage(Integer packageID, String sellerID, Integer productID, 
+			Integer pQuantity){
+		Connection connection =null;
+		try{
+			connection = getConnection();
+			PreparedStatement pstmt;
+			pstmt = connection.prepareStatement("select address from seller "
+					+ "where username=?");
+			pstmt.setString(1, sellerID);
+			ResultSet rs=pstmt.executeQuery();
+			String location=null;
+			while(rs.next()){
+				location=rs.getString(1);
+			}
+			pstmt = connection.prepareStatement("select username, (select count(*) from package where transporter.username = package.transportationID and package.deliveryDate is null) as count from transporter order by count asc limit 1;");
+			rs=pstmt.executeQuery();
+			String tID=null;
+			if(rs.next()){
+				tID=rs.getString(1);
+			}
+			pstmt = connection.prepareStatement("insert into package values"
+					+ "(?, ?, ?, ?, ?, null, ?)");
+			pstmt.setInt(1, packageID);
+			pstmt.setString(2, tID);
+			pstmt.setString(3, sellerID);
+			pstmt.setInt(4, productID);
+			pstmt.setInt(5, pQuantity);
+			pstmt.setString(6, location);
+			pstmt.executeUpdate();
+		}catch(SQLException sqle){
+			System.out.println("SQL exception during insertPackage");
+		} finally{
+			closeConnection(connection);
+		}
+	}
+	
+	public static void insertOrder(Integer orderID, Integer packageID, String customerID){
+		Connection connection =null;
+		try{
+			connection = getConnection();
+			PreparedStatement pstmt;
+			Date date = new Date();
+			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+			String todaysdate = dateFormat.format(date);
+			pstmt = connection.prepareStatement("insert into orders values"
+					+ "(?, ?, ?, ?)");
+			pstmt.setInt(1, orderID);
+			pstmt.setInt(2, packageID);
+			pstmt.setString(3, customerID);
+			pstmt.setString(4, todaysdate);
+			pstmt.executeUpdate();
+		}catch(SQLException sqle){
+			System.out.println("SQL exception during insertPackage");
 		} finally{
 			closeConnection(connection);
 		}
