@@ -10,8 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 
 public class product {
-	public static HashMap<String,String> products(Integer id){
-		HashMap<String,String> prods = new HashMap<String,String>();
+	public static ArrayList<ArrayList<String>> products(Integer id){
+		ArrayList<ArrayList<String>> prods = new ArrayList<ArrayList<String>>();
+		
 		Connection connection=null;
 		try{
 			connection = getConnection();
@@ -21,16 +22,17 @@ public class product {
 			pstmt.setInt(1, id);
 			pstmt.setInt(2, id+10);
 			
-			
 			ResultSet rs=pstmt.executeQuery();
 			while(rs.next()){
+				ArrayList<String> prod = new ArrayList<String>();
 				System.out.println(rs.getString(2));
 				pstmt1 = connection.prepareStatement("select min(price) from product where productID=?");
 				pstmt1.setInt(1, Integer.parseInt(rs.getString(1)));
 				ResultSet rs1 = pstmt1.executeQuery();
 				rs1.next();
 				System.out.println(rs1.getString(1));
-				prods.put(rs.getString(2),rs1.getString(1));
+				prod.add(rs.getString(1)); prod.add(rs.getString(2));prod.add(rs1.getString(1));
+				prods.add(prod);
 			}
 			
 		} catch(SQLException sqle){
