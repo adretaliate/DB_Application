@@ -10,7 +10,20 @@
 </head>
 <body>
 <center>
-<h1>Sign In</h1>
+<%
+String username=null;
+Integer id=0;
+Cookie[] cookies=request.getCookies();
+if(cookies!=null){
+	for(Cookie cookie: cookies){
+		if(cookie.getName().equals("username")){
+			username=cookie.getValue();
+		}
+	}
+}
+%>
+<h1>Welcome to eMarket</h1><p align="right">Hello, <%=username %>
+&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href="cart.jsp" >Cart</a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href="prodservelet?action=logout">Log Out</a></p>
 <%
 String productID=request.getParameter("productID");
 ArrayList<ArrayList<String> > sellers = product.getSellers(productID);
