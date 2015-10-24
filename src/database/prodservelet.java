@@ -154,10 +154,11 @@ public class prodservelet extends HttpServlet {
 		product.addToCart(username, productID, sellerID);
 		System.out.println(username);
 		PrintWriter out=response.getWriter();
-		RequestDispatcher rd = getServletContext().getRequestDispatcher("/loginsuccess.jsp");
-        out = response.getWriter();
-        out.println("<html><center><font color=red>Item added to Cart</font></center></html>\n");
-        rd.include(request, response);
+		response.sendRedirect("loginsuccess.jsp");  
+//		RequestDispatcher rd = getServletContext().getRequestDispatcher("/loginsuccess.jsp");
+//        out = response.getWriter();
+//        out.println("<html><center><font color=red>Item added to Cart</font></center></html>\n");
+//        rd.include(request, response);
 		
 	}
 
