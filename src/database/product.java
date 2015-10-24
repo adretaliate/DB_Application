@@ -8,7 +8,8 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -76,7 +77,8 @@ public class product {
 			PreparedStatement pstmt;
 			pstmt = connection.prepareStatement("select max(packageID) from package");
 			ResultSet rs = pstmt.executeQuery();
-			num  = rs.getInt(1);
+			if(rs.next()) num  = rs.getInt(1);
+			else num=0;
 			
 		}catch(SQLException sqle){
 			System.out.println("SQL exception during getMaxPackageId");
@@ -96,7 +98,8 @@ public class product {
 			PreparedStatement pstmt;
 			pstmt = connection.prepareStatement("select max(orderID) from orders");
 			ResultSet rs = pstmt.executeQuery();
-			num  = rs.getInt(1);
+			if(rs.next()) num  = rs.getInt(1);
+			else num=0;
 			
 		}catch(SQLException sqle){
 			System.out.println("SQL exception during getMaxOrderId");
@@ -311,7 +314,7 @@ public class product {
 		try{
 			connection = getConnection();
 			PreparedStatement pstmt;
-			Date date = new Date();
+			java.sql.Date date = new java.sql.Date(Calendar.getInstance().getTime().getTime());
 			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 			String todaysdate = dateFormat.format(date);
 			pstmt = connection.prepareStatement("insert into orders values"
@@ -319,10 +322,11 @@ public class product {
 			pstmt.setInt(1, orderID);
 			pstmt.setInt(2, packageID);
 			pstmt.setString(3, customerID);
-			pstmt.setString(4, todaysdate);
+			pstmt.setDate(4, date);
 			pstmt.executeUpdate();
 		}catch(SQLException sqle){
-			System.out.println("SQL exception during insertPackage");
+			System.out.println("SQL exception during insertOrder");
+			System.out.println(sqle);
 		} finally{
 			closeConnection(connection);
 		}
