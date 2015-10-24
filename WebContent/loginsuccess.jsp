@@ -35,7 +35,7 @@ if(cookies!=null){
 	
 	<%
 	for(ArrayList<String> prod : prods){
-	%><tr><td><a href="product.jsp?produdctID=<%=prod.get(0) %>" ><%=prod.get(1)%><br></td><td><%=prod.get(2)%></td></tr><%
+	%><tr><td><a href="product.jsp?productID=<%=prod.get(0) %>" ><%=prod.get(1)%><br></td><td><%=prod.get(2)%></td></tr><%
 	}
 }
 %>
