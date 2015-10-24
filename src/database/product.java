@@ -187,6 +187,45 @@ public class product {
 		return cart;
 	}
  	
+	public static void delete(String customerID, String sellerID, String productID){
+		Connection connection =null;
+		try{
+			connection = getConnection();
+			PreparedStatement pstmt;
+			pstmt = connection.prepareStatement("delete from cart where "
+					+ "customerID=? and sellerID=? and productID=?");
+			pstmt.setString(1, customerID);
+			pstmt.setString(2, sellerID);
+			pstmt.setString(3, productID);
+			pstmt.executeUpdate();
+			
+		}catch(SQLException sqle){
+			System.out.println("SQL exception during getCart");
+		} finally{
+			closeConnection(connection);
+		}
+	}
+	
+	public static void updateCart(String customerID, String sellerID, String productID, Integer quantity){
+		Connection connection =null;
+		try{
+			connection = getConnection();
+			PreparedStatement pstmt;
+			pstmt = connection.prepareStatement("update cart set "
+					+ "cartquantity=? where customerID=? and sellerID=? and productID=?");
+			pstmt.setInt(1, quantity);
+			pstmt.setString(2, customerID);
+			pstmt.setString(3, sellerID);
+			pstmt.setString(4, productID);
+			pstmt.executeUpdate();
+			
+		}catch(SQLException sqle){
+			System.out.println("SQL exception during getCart");
+		} finally{
+			closeConnection(connection);
+		}
+	}
+	
 	static Connection getConnection() {
 		String dbURL = "jdbc:postgresql://10.105.1.12/cs387";
         String dbUser = "db130050060";
