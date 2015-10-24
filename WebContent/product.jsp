@@ -20,7 +20,7 @@ ArrayList<ArrayList<String> > sellers = product.getSellers(productID);
 
 <%
 for(ArrayList<String> seller : sellers){
-	%><tr><td><%=seller.get(0)%></td><td><%=seller.get(1)%></td><td><%=seller.get(2)%></td><td><%=seller.get(3)%></td><button type="submit" name="addtocart" value="<%=seller.get(4)%>">AddToCart</button></tr><%
+	%><tr><td><%=seller.get(0)%></td><td><%=seller.get(1)%></td><td><%=seller.get(2)%></td><td><%=seller.get(3)%></td></tr><button type="submit" name="addtocart" value="<%=seller.get(4)%>">AddToCart</button><%
 }
 
 %>
