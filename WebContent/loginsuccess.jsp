@@ -27,20 +27,25 @@ if(cookies!=null){
 %>
 <h1>Welcome to eMarket</h1><p align="right">Hello, <%=username %>
 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href="www.google.com" >Your Orders</a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href="prodservelet?action=logout">Log Out</a></p>
+<form action="prodservelet?action=place_order" method="post">
 <%if(id!=0){
 	HashMap<String, String> prods = product.products(id);
 	%>
 	<table width="700"><tr><td><b>Product Name</td><td><b>Price</td></td></tr>
-	<form action="">
+	
 	<%
 	for(String prod : prods.keySet()){
 	%><tr><td><input type="checkbox" name="product" value="Bike"><%=prod%><br></td><td><%=prods.get(prod)%></td></tr><%
 	}
 }
 %>
+</table>
 <br>
 <br>
 <br>
 <a href="prodservelet?action=prev" >Prev.</a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href="prodservelet?action=next" >Next</a>
+<br>
+<button type="submit">Place Order</button><br>
+</form>
 </body>
 </html>
