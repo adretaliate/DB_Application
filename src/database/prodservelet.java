@@ -101,16 +101,21 @@ public class prodservelet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String productID = request.getParameter("productID");
+		String productID = request.getParameter("action");
 		String sellerID = request.getParameter("addtocart");
 		Cookie[] cookies = request.getCookies();
+		System.out.println("prodservelet");
+		System.out.println(productID);
+		System.out.println(sellerID);
 		String username=null;
 		for(Cookie cookie:cookies){
 			if(cookie.getName().equals("username")){
 				username=cookie.getValue();
 			}
 		}
+		System.out.println(username);
 		product.addToCart(username, productID, sellerID);
+		System.out.println(username);
 		PrintWriter out=response.getWriter();
 		RequestDispatcher rd = getServletContext().getRequestDispatcher("/loginsuccess.jsp");
         out = response.getWriter();
