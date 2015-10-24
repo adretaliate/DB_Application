@@ -94,6 +94,43 @@ public class prodservelet extends HttpServlet {
                     .getRequestDispatcher("/loginsuccess.jsp");
             requestDispatcher.forward(request, response);
 		}
+		else if(action.equals("edit_or_delete")){
+			String edit=request.getParameter("edit");
+			String delete=request.getParameter("delete");
+			Cookie[] cookies = request.getCookies();
+			String username=null;
+			if(cookies!=null){
+				for(Cookie cookie:cookies){
+					if(cookie.getName().equals("username")){
+						username=cookie.getValue();
+					}
+				}
+			}
+			if(delete!=null){
+				String[] split = delete.split(" ");
+				product.delete(username, split[1], split[0]);
+				PrintWriter out=response.getWriter();
+				RequestDispatcher rd = getServletContext().getRequestDispatcher("/cart.jsp");
+		        out = response.getWriter();
+		        out.println("<html><center><font color=red>Item deleted</font></center></html>\n");
+		        rd.include(request, response);
+			}
+			else if(edit!=null){
+				String[] split = edit.split(" ");
+				String quantity = request.getParameter(edit);
+				if(Integer.parseInt(quantity)!=0){
+					product.updateCart(username, split[1], split[0], Integer.parseInt(quantity));
+				}
+				else{
+					product.delete(username, split[1], split[0]);
+				}
+				PrintWriter out=response.getWriter();
+				RequestDispatcher rd = getServletContext().getRequestDispatcher("/cart.jsp");
+		        out = response.getWriter();
+		        out.println("<html><center><font color=red>Item updated</font></center></html>\n");
+		        rd.include(request, response);
+			}
+		}
 	}
 
 	/**
