@@ -2,6 +2,7 @@ package database;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -150,10 +151,37 @@ public class prodservelet extends HttpServlet {
 					product.updateCart(username, split[1], split[0], Integer.parseInt(quantity));
 				}
 				else{
-					product.delete(username, split[1], split[0]);
+					product.delete(username, split[1], split[0]);	
 				}
 				response.sendRedirect("cart.jsp");
 			}
+		}
+		
+		else if(action.equals("place_order"))
+		{
+			Cookie[] cookies = request.getCookies();
+			String username=null;
+			if(cookies!=null){
+				for(Cookie cookie:cookies){
+					if(cookie.getName().equals("username")){
+						username=cookie.getValue();
+					}
+				}
+			}
+			
+			ArrayList<ArrayList<String>> cart = product.getCart(username);
+			Integer curr_packageId = getMaxPackageId();
+			Integer curr_orderId = getMaxOrderId();
+			
+			for(ArrayList<String> pack : cart)
+			{
+				curr_packageId ++;
+				product.insertPackage(curr_packageId, pack.get(4), Integer.parseInt(pack.get(3)), Integer.parseInt(pack.get(2)) );
+				product.insertOrder(curr_orderId+1, curr_packageId, username);
+				product.delete(username, pack.get(4), pack.get(3));
+				
+			}
+			
 		}
 	}
 
