@@ -41,9 +41,11 @@ public class prodservelet extends HttpServlet {
 					if(cookie.getName().equals("username")){
 						cookie.setMaxAge(0);
 						cookie.setValue(null);
+						response.addCookie(cookie);
 					}
 					if(cookie.getName().equals("id")){
 						cookie.setMaxAge(0);
+						response.addCookie(cookie);
 					}
 				}
 			}
@@ -52,6 +54,45 @@ public class prodservelet extends HttpServlet {
 	        out = response.getWriter();
 	        out.println("<html><center><font color=red>Logged Out</font></center></html>\n");
 	        rd.include(request, response);
+		}
+		else if(action.equals("prev")){
+			Cookie[] cookies = request.getCookies();
+			System.out.println(action);
+			if(cookies!=null){
+				for(Cookie cookie:cookies){
+					if(cookie.getName().equals("id")){
+						Integer id = Integer.parseInt(cookie.getValue());
+						if(id>10){
+							System.out.println(action);
+							String newid = String.valueOf(id-10);
+							cookie.setValue(newid);
+							response.addCookie(cookie);
+						}
+					}
+				}
+			}
+			RequestDispatcher requestDispatcher = request
+                    .getRequestDispatcher("/loginsuccess.jsp");
+            requestDispatcher.forward(request, response);
+		}
+		else if(action.equals("next")){
+			Cookie[] cookies = request.getCookies();
+			if(cookies!=null){
+				for(Cookie cookie:cookies){
+					if(cookie.getName().equals("id")){
+						Integer id = Integer.parseInt(cookie.getValue());
+						String newid = String.valueOf(id+10);
+						Integer check = product.getMaxProductId();
+						if(check > id +10){
+							cookie.setValue(newid);
+							response.addCookie(cookie);
+						}
+					}
+				}
+			}
+			RequestDispatcher requestDispatcher = request
+                    .getRequestDispatcher("/loginsuccess.jsp");
+            requestDispatcher.forward(request, response);
 		}
 	}
 
