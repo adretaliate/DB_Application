@@ -71,10 +71,12 @@ public class product {
 		try{
 			connection = getConnection();
 			PreparedStatement pstmt;
-			pstmt = connection.prepareStatement("select seller.name, product.price, product.discount, seller.username from product natural join seller where productID=?");
-			pstmt.setString(1,productID);
+			System.out.println(productID);
+			pstmt = connection.prepareStatement("select seller.name, price,discount, username from product natural join seller where productID=?");
+			pstmt.setInt(1, Integer.parseInt(productID));
 			
 			ResultSet rs = pstmt.executeQuery();
+			System.out.println(productID);
 			while(rs.next())
 			{
 				ArrayList<String> seller= new ArrayList<String>();
@@ -83,6 +85,7 @@ public class product {
 				price = rs.getString(2);
 				discount = rs.getString(3);
 				username = rs.getString(4);
+				System.out.println(name);
 				discounted_price = Double.toString(Double.parseDouble(price)*(1-Double.parseDouble(discount)/100));
 				
 				seller.add(name);
