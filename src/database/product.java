@@ -162,16 +162,20 @@ public class product {
 			
 			while(rs.next()){
 				ArrayList<String> item= new ArrayList<String>();
-				String productName, discounted_price, cartquantity, price, discount;
+				String productName, discounted_price, cartquantity, price, discount, productid, sellerid;
 				productName = rs.getString(7);
 				price = rs.getString(3);
 				discount = rs.getString(5);
 				discounted_price = Double.toString(Double.parseDouble(price)*(1-Double.parseDouble(discount)/100));
 				cartquantity = rs.getString(11);
+				productid=rs.getString(1);
+				sellerid=rs.getString(2);
 				
 				item.add(productName);
 				item.add(discounted_price);
 				item.add(cartquantity);
+				item.add(productid);
+				item.add(sellerid);
 				cart.add(item);
 			}
 			
