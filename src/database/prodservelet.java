@@ -33,23 +33,26 @@ public class prodservelet extends HttpServlet {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		System.out.println("came to doGet");
-		Cookie[] cookies = request.getCookies();
-		if(cookies!=null){
-			for(Cookie cookie:cookies){
-				if(cookie.getName().equals("username")){
-					cookie.setMaxAge(0);
-					cookie.setValue(null);
-				}
-				if(cookie.getName().equals("id")){
-					cookie.setMaxAge(0);
+		String action = request.getParameter("action");
+		if(action.equals("logout")){
+			Cookie[] cookies = request.getCookies();
+			if(cookies!=null){
+				for(Cookie cookie:cookies){
+					if(cookie.getName().equals("username")){
+						cookie.setMaxAge(0);
+						cookie.setValue(null);
+					}
+					if(cookie.getName().equals("id")){
+						cookie.setMaxAge(0);
+					}
 				}
 			}
+			PrintWriter out=response.getWriter();
+			RequestDispatcher rd = getServletContext().getRequestDispatcher("/loginpage.jsp");
+	        out = response.getWriter();
+	        out.println("<html><center><font color=red>Logged Out</font></center></html>\n");
+	        rd.include(request, response);
 		}
-		PrintWriter out=response.getWriter();
-		RequestDispatcher rd = getServletContext().getRequestDispatcher("/loginpage.jsp");
-        out = response.getWriter();
-        out.println("<html><center><font color=red>Logged Out</font></center></html>\n");
-        rd.include(request, response);
 	}
 
 	/**
