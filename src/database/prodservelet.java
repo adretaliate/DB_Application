@@ -170,8 +170,8 @@ public class prodservelet extends HttpServlet {
 			}
 			
 			ArrayList<ArrayList<String>> cart = product.getCart(username);
-			Integer curr_packageId = getMaxPackageId();
-			Integer curr_orderId = getMaxOrderId();
+			Integer curr_packageId = product.getMaxPackageId();
+			Integer curr_orderId = product.getMaxOrderId();
 			
 			for(ArrayList<String> pack : cart)
 			{
