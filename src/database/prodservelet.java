@@ -118,11 +118,16 @@ public class prodservelet extends HttpServlet {
 			else if(edit!=null){
 				String[] split = edit.split(" ");
 				String quantity = request.getParameter(edit);
-				product.updateCart(username, split[1], split[0], Integer.parseInt(quantity));
+				if(Integer.parseInt(quantity)!=0){
+					product.updateCart(username, split[1], split[0], Integer.parseInt(quantity));
+				}
+				else{
+					product.delete(username, split[1], split[0]);
+				}
 				PrintWriter out=response.getWriter();
 				RequestDispatcher rd = getServletContext().getRequestDispatcher("/cart.jsp");
 		        out = response.getWriter();
-		        out.println("<html><center><font color=red>Item deleted</font></center></html>\n");
+		        out.println("<html><center><font color=red>Item updated</font></center></html>\n");
 		        rd.include(request, response);
 			}
 		}
