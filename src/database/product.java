@@ -6,23 +6,30 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class product {
-	public static List<String> products(Integer id){
-		List<String> prods = new ArrayList<String>();
+	public static HashMap<String,String> products(Integer id){
+		HashMap<String,String> prods = new HashMap<String,String>();
 		Connection connection=null;
 		try{
 			connection = getConnection();
-			PreparedStatement pstmt;
+			PreparedStatement pstmt,pstmt1;
 			pstmt = connection.prepareStatement("select * from productdescription "
 					+ "where id>=? and id<=?");
 			pstmt.setInt(1, id);
 			pstmt.setInt(2, id+10);
+			
+			
 			ResultSet rs=pstmt.executeQuery();
 			while(rs.next()){
-				prods.add(rs.getString(3));
+				pstmt1 = connection.prepareStatement("select min(price) from product where productID=?");
+				pstmt1.setInt(1, Integer.parseInt(rs.getString(1)));
+				ResultSet rs1 = pstmt1.executeQuery();
+				prods.put(rs.getString(2),rs1.getString(1));
 			}
+			
 		} catch(SQLException sqle){
 			System.out.println("SQL exception during registration");
 		} finally{
@@ -30,6 +37,26 @@ public class product {
 			closeConnection(connection);
 		}
 		return prods;
+	}
+	
+	public static Integer getMaxProductId()
+	{
+		Integer num=0;
+		Connection connection=null;
+		try{
+			connection = getConnection();
+			PreparedStatement pstmt;
+			pstmt = connection.prepareStatement("select max(id) from productDescription");
+			ResultSet rs = pstmt.executeQuery();
+			num  = rs.getInt(1);
+			
+		}catch(SQLException sqle){
+			System.out.println("SQL exception during getMaxProductId");
+		} finally{
+			closeConnection(connection);
+		}
+		return num;
+		
 	}
 	
 	static Connection getConnection() {
