@@ -35,7 +35,7 @@ if(cookies!=null){
 	
 	<%
 	for(ArrayList<String> prod : prods){
-	%><tr><td><%=prod.get(0)%></td><td><%=prod.get(1)%></td><td><%=prod.get(2)%></td> <td><button type="submit" name="delete" value="<%=prod.get(3)%> <%=prod.get(4)%>">Delete item</button></td><td><input type="number" name="<%= prod.get(3)%> <%= prod.get(4)%>" maxlength="3" value="<%=prod.get(2)%> "></td><td><button type="submit" name="edit" value="<%=prod.get(3)%> <%=prod.get(4)%>">Edit item</button></td></tr><%
+	%><tr><td><%=prod.get(0)%></td><td><%=prod.get(1)%></td><td><%=prod.get(2)%></td> <td><button type="submit" name="delete" value="<%=prod.get(3)%> <%=prod.get(4)%>">Delete item</button></td><td><input type="number" min="0" name="<%= prod.get(3)%> <%= prod.get(4)%>" maxlength="3" value="<%=prod.get(2)%> "></td><td><button type="submit" name="edit" value="<%=prod.get(3)%> <%=prod.get(4)%>">Edit item</button></td></tr><%
 			
 	}
 
