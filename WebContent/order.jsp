@@ -27,10 +27,14 @@ if(cookies!=null){
 <%
 HashMap<Integer, String> date= product.getOrderDate(username);
 HashMap<Integer, List<List<String>> > orders = product.getOrders(username); 
+HashMap<Integer, Boolean> review = product.checkReview(username);
 for(Integer orderID: orders.keySet()){
 	%><table width="700"><tr><td><b>OrderID: <%=orderID %></td><td><b>OrderDate: <%=date.get(orderID) %></td></td></tr><%
 	for(List<String> pack: orders.get(orderID)){
 		%><tr><td><%=pack.get(0)%></td><td><%=pack.get(1)%></td><td><%=pack.get(2)%></td><td><%=pack.get(3)%></td><%
+				if(review.get(pack.get(4))){
+					%><td><input type="text" name="<%= pack.get(4)%>" maxlength="100" value="Write a review"></td><td><button type="submit" name="review" value="<%=pack.get(4)%>">Edit item</button></td><%
+				}
 	}
 	%></table><%
 }
