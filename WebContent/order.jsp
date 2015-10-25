@@ -28,15 +28,22 @@ if(cookies!=null){
 HashMap<Integer, String> date= product.getOrderDate(username);
 HashMap<Integer, ArrayList<List<String>> > orders = product.getOrders(username); 
 HashMap<Integer, Boolean> review = product.checkReview(username);
+System.out.println("functions are correct");
 %>
 <form action="prodservelet?action=review" method="post">
 <%
 
 for(Integer orderID: orders.keySet()){
+	System.out.println(orderID);
 	%><table width="700"><tr><td><b>OrderID: <%=orderID %></td><td><b>OrderDate: <%=date.get(orderID) %></td></td></tr><%
 	for(List<String> pack: orders.get(orderID)){
+		System.out.println(orderID);
 		%><tr><td><%=pack.get(0)%></td><td><%=pack.get(1)%></td><td><%=pack.get(2)%></td><td><%=pack.get(3)%></td><%
-				if(review.get(pack.get(4))){
+				System.out.println(orderID);
+				System.out.println(pack.get(4));
+				System.out.println(review.get(1));
+				if(!review.get(Integer.parseInt(pack.get(4)))){
+					System.out.println(orderID);
 					%><td><input type="number" name="rating<%= pack.get(4)%>" min="1" max="5" value="Write a review"></td><td><input type="text" name="<%= pack.get(4)%>" maxlength="100" value="Write a review"></td><td><button type="submit" name="review" value="<%=pack.get(4)%>">Edit item</button></td><%
 				}
 	}
