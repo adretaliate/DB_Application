@@ -26,7 +26,7 @@ if(cookies!=null){
 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href="prodservelet?action=logout">Log Out</a></p>
 <%
 HashMap<Integer, String> date= product.getOrderDate(username);
-HashMap<Integer, List<List<String>> > orders = product.getOrders(username); 
+HashMap<Integer, ArrayList<List<String>> > orders = product.getOrders(username); 
 HashMap<Integer, Boolean> review = product.checkReview(username);
 %>
 <form action="prodservelet?action=review" method="post">
