@@ -37,7 +37,7 @@ for(Integer orderID: orders.keySet()){
 	for(List<String> pack: orders.get(orderID)){
 		%><tr><td><%=pack.get(0)%></td><td><%=pack.get(1)%></td><td><%=pack.get(2)%></td><td><%=pack.get(3)%></td><%
 				if(review.get(pack.get(4))){
-					%><td><input type="text" name="<%= pack.get(4)%>" maxlength="100" value="Write a review"></td><td><button type="submit" name="review" value="<%=pack.get(4)%>">Edit item</button></td><%
+					%><td><input type="number" name="rating<%= pack.get(4)%>" min="1" max="5" value="Write a review"></td><td><input type="text" name="<%= pack.get(4)%>" maxlength="100" value="Write a review"></td><td><button type="submit" name="review" value="<%=pack.get(4)%>">Edit item</button></td><%
 				}
 	}
 	%></table><%
