@@ -341,7 +341,7 @@ public class product {
 		try{
 			connection = getConnection();
 			PreparedStatement pstmt;
-			pstmt = connection.prepareStatement("select orderId,date from orders where customerId = ? group by orderId");
+			pstmt = connection.prepareStatement("select distinct orderId,orderdate from orders where customerId = ?");
 			pstmt.setString(1, customerId);
 			ResultSet rs = pstmt.executeQuery();
 			while(rs.next())
@@ -350,7 +350,7 @@ public class product {
 			}
 			
 		}catch(SQLException sqle){
-			System.out.println("SQL exception during insertOrder");
+			System.out.println("SQL exception during getOrderDate");
 			System.out.println(sqle);
 		} finally{
 			closeConnection(connection);
@@ -377,7 +377,11 @@ public class product {
 				String discount = rs.getString(3);
 				String price = rs.getString(4);
 				String currentLocation = rs.getString(5);
-				String deliverydate = rs.getDate(6).toString();
+				Date date = rs.getDate(6);
+				String deliverydate=null;
+				if(date!=null){
+					deliverydate=date.toString();
+				}
 				String discounted_price = Double.toString(Double.parseDouble(price)*(1-Double.parseDouble(discount)/100));
 				String packageid = rs.getString(7);
 				Integer orderid = rs.getInt(8);
@@ -433,7 +437,7 @@ public class product {
 				pstmt1 = connection.prepareStatement("select * from productreview where packageid=?");
 				pstmt1.setInt(1, rs.getInt(1));
 				ResultSet rs1 = pstmt1.executeQuery();
-				if(rs.next())checkR.put(rs.getInt(1), true);
+				if(rs1.next())checkR.put(rs.getInt(1), true);
 				else checkR.put(rs.getInt(1), false);
 			}
 			
