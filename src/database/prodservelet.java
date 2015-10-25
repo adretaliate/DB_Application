@@ -26,6 +26,16 @@ public class prodservelet extends HttpServlet {
         super();
         // TODO Auto-generated constructor stub
     }
+    
+    public String isValid(String review){
+    	String ret=null;
+    	for(int i=0;i<review.length();i++){
+    		if(review.charAt(i) != ' '){
+    			ret=review.substring(i);
+    		}
+    	}
+    	return ret;
+    }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -183,6 +193,41 @@ public class prodservelet extends HttpServlet {
 			}
 			response.sendRedirect("loginsuccess.jsp");
 			
+		}
+		else if(action.equals("review")){
+			String pack = request.getParameter("review");
+			String review = request.getParameter(pack);
+			String ret=isValid(review);
+			Cookie[] cookies = request.getCookies();
+			String username=null;
+			if(cookies!=null){
+				for(Cookie cookie:cookies){
+					if(cookie.getName().equals("username")){
+						username=cookie.getValue();
+					}
+				}
+			}
+			String rating = request.getParameter("rating"+pack);
+			if(rating!=null){
+				if(ret!=null){
+					product.insertReview(Integer.parseInt(pack), username, Integer.parseInt(rating), ret);
+				}
+				else{
+					product.insertReview(Integer.parseInt(pack), username, Integer.parseInt(rating), null);
+				}
+				PrintWriter out=response.getWriter();
+				RequestDispatcher rd = getServletContext().getRequestDispatcher("/order.jsp");
+		        out = response.getWriter();
+		        out.println("<html><center><font color=red>Review Added</font></center></html>\n");
+		        rd.include(request, response);
+			}
+			else{
+				PrintWriter out=response.getWriter();
+				RequestDispatcher rd = getServletContext().getRequestDispatcher("/order.jsp");
+		        out = response.getWriter();
+		        out.println("<html><center><font color=red>Fill in rating</font></center></html>\n");
+		        rd.include(request, response);
+			}
 		}
 	}
 
