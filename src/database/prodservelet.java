@@ -32,6 +32,7 @@ public class prodservelet extends HttpServlet {
     	for(int i=0;i<review.length();i++){
     		if(review.charAt(i) != ' '){
     			ret=review.substring(i);
+    			break;
     		}
     	}
     	return ret;
@@ -208,7 +209,7 @@ public class prodservelet extends HttpServlet {
 				}
 			}
 			String rating = request.getParameter("rating"+pack);
-			if(rating!=null){
+			if(rating!=null && !rating.equals("") ){
 				if(ret!=null){
 					product.insertReview(Integer.parseInt(pack), username, Integer.parseInt(rating), ret);
 				}
