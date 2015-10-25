@@ -23,7 +23,7 @@ if(cookies!=null){
 }
 %>
 <h1>Welcome to eMarket</h1><p align="right">Hello, <%=username %>
-&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href="" >Your Orders</a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href="prodservelet?action=logout">Log Out</a></p>
+&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href="order.jsp" >Your Orders</a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href="prodservelet?action=logout">Log Out</a></p>
 <center><h2>Your cart</h2></center>
 
 <form action="prodservelet?action=edit_or_delete" method="post">
