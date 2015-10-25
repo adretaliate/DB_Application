@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class product {
+	
 	public static ArrayList<ArrayList<String>> products(Integer id){
 		ArrayList<ArrayList<String>> prods = new ArrayList<ArrayList<String>>();
 		
@@ -330,6 +331,143 @@ public class product {
 		} finally{
 			closeConnection(connection);
 		}
+	}
+	
+	public static HashMap<Integer,String> getOrderDate(String customerId)
+	{
+
+		Connection connection =null;
+		HashMap<Integer,String> dates = new HashMap<Integer,String>();
+		try{
+			connection = getConnection();
+			PreparedStatement pstmt;
+			pstmt = connection.prepareStatement("select orderId,date from orders where customerId = ? group by orderId");
+			pstmt.setString(1, customerId);
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next())
+			{
+				dates.put(rs.getInt(1), rs.getDate(2).toString());
+			}
+			
+		}catch(SQLException sqle){
+			System.out.println("SQL exception during insertOrder");
+			System.out.println(sqle);
+		} finally{
+			closeConnection(connection);
+		}
+		
+		return dates;
+	}
+	
+	public static HashMap<Integer,ArrayList<List<String>>> getOrders(String customerId)
+	{
+		Connection connection =null;
+		HashMap<Integer,ArrayList<List<String>>> orders = new HashMap<Integer,ArrayList<List<String>>>();
+		try{
+			connection = getConnection();
+			PreparedStatement pstmt;
+			pstmt = connection.prepareStatement("select productdescription.name, packagequantity, discount,price,currentlocation,deliverydate,packageid,orderid from package natural join orders natural join productdescription natural join product where customerId = ?");
+			pstmt.setString(1, customerId);
+			ResultSet rs = pstmt.executeQuery();
+			
+			while(rs.next())
+			{
+				String name = rs.getString(1);
+				String packagequantity = rs.getString(2);
+				String discount = rs.getString(3);
+				String price = rs.getString(4);
+				String currentLocation = rs.getString(5);
+				String deliverydate = rs.getDate(6).toString();
+				String discounted_price = Double.toString(Double.parseDouble(price)*(1-Double.parseDouble(discount)/100));
+				String packageid = rs.getString(7);
+				Integer orderid = rs.getInt(8);
+				ArrayList<String> packg = new ArrayList<String>();
+				packg.add(name); 
+				packg.add(packagequantity);
+				packg.add(discounted_price);
+				if(deliverydate==""|| deliverydate==null)
+				{
+					packg.add(currentLocation);
+				}
+				else packg.add("Delivered");
+				
+				packg.add(packageid);
+				
+				if(orders.keySet().contains(orderid))
+				{
+					orders.get(orderid).add(packg);
+				}
+				
+				else
+				{
+					ArrayList<List<String>> array = new ArrayList<List<String>>();
+					array.add(packg);
+					orders.put(orderid, array);
+				}
+			}
+			
+		}catch(SQLException sqle){
+			System.out.println("SQL exception during getOrders");
+			System.out.println(sqle);
+		} finally{
+			closeConnection(connection);
+		}
+		
+		return orders;
+	}
+	
+	
+	
+	public static HashMap<Integer,Boolean> checkReview(String customerId)
+	{
+		Connection connection =null;
+		HashMap<Integer,Boolean> checkR = new HashMap<Integer,Boolean>();
+		try{
+			connection = getConnection();
+			PreparedStatement pstmt,pstmt1;
+			pstmt = connection.prepareStatement("select packageid from orders where customerid=? ");
+			pstmt.setString(1, customerId);
+			ResultSet rs = pstmt.executeQuery();	
+			while(rs.next())
+			{
+				pstmt1 = connection.prepareStatement("select * from productreview where packageid=?");
+				pstmt1.setInt(1, rs.getInt(1));
+				ResultSet rs1 = pstmt1.executeQuery();
+				if(rs.next())checkR.put(rs.getInt(1), true);
+				else checkR.put(rs.getInt(1), false);
+			}
+			
+		}catch(SQLException sqle){
+			System.out.println("SQL exception during checkReview");
+			System.out.println(sqle);
+		} finally{
+			closeConnection(connection);
+		}
+		
+		return checkR;
+	}
+	
+	public static void insertReview(Integer packageId, String customerId, Integer rating, String review)
+	{
+		Connection connection =null;
+		try{
+			connection = getConnection();
+			PreparedStatement pstmt;
+			pstmt = connection.prepareStatement("insert into productreview (packageId, customerId, rating, review) values(?,?,?,?)");
+			pstmt.setInt(1, packageId);
+			pstmt.setString(2, customerId);
+			pstmt.setInt(3, rating);
+			pstmt.setString(4, review);
+			pstmt.executeUpdate();
+			
+			
+		}catch(SQLException sqle){
+			System.out.println("SQL exception during insertOrder");
+			System.out.println(sqle);
+		} finally{
+			closeConnection(connection);
+		}
+		
 	}
 	
 	static Connection getConnection() {
