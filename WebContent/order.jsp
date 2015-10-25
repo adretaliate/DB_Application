@@ -42,7 +42,7 @@ for(Integer orderID: orders.keySet()){
 				System.out.println(orderID);
 				System.out.println(pack.get(4));
 				System.out.println(review.get(1));
-				if(!review.get(Integer.parseInt(pack.get(4)))){
+				if(!review.get(Integer.parseInt(pack.get(4))) && pack.get(3).equals("Delivered")){
 					System.out.println(orderID);
 					%><td><input type="number" name="rating<%= pack.get(4)%>" min="1" max="5" value="Write a review"></td><td><input type="text" name="<%= pack.get(4)%>" maxlength="100" value="Write a review"></td><td><button type="submit" name="review" value="<%=pack.get(4)%>">Edit item</button></td><%
 				}
