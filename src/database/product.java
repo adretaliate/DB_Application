@@ -15,6 +15,13 @@ import java.util.List;
 
 public class product {
 	
+	public static Double moneyToDouble(String money){
+		String[] arr = money.split(" ");
+		String number = arr[1];
+		String d = number.replaceAll(",", "");
+		return Double.parseDouble(d);
+	}
+	
 	public static ArrayList<ArrayList<String>> products(Integer id){
 		ArrayList<ArrayList<String>> prods = new ArrayList<ArrayList<String>>();
 		
@@ -37,6 +44,7 @@ public class product {
 				rs1.next();
 				System.out.println(rs1.getString(1));
 				prod.add(rs.getString(1)); prod.add(rs.getString(2));prod.add(rs1.getString(1));
+				System.out.println(moneyToDouble(rs1.getString(1)));
 				prods.add(prod);
 			}
 			
@@ -133,7 +141,7 @@ public class product {
 				discount = rs.getString(3);
 				username = rs.getString(4);
 				System.out.println(name);
-				discounted_price = Double.toString(Double.parseDouble(price)*(1-Double.parseDouble(discount)/100));
+				discounted_price = Double.toString(moneyToDouble(price)*(1-Double.parseDouble(discount)/100));
 				
 				seller.add(name);
 				seller.add(price);
@@ -213,7 +221,7 @@ public class product {
 				productName = rs.getString(7);
 				price = rs.getString(3);
 				discount = rs.getString(5);
-				discounted_price = Double.toString(Double.parseDouble(price)*(1-Double.parseDouble(discount)/100));
+				discounted_price = Double.toString(moneyToDouble(price)*(1-Double.parseDouble(discount)/100));
 				cartquantity = rs.getString(11);
 				productid=rs.getString(1);
 				sellerid=rs.getString(2);
@@ -382,7 +390,7 @@ public class product {
 				if(date!=null){
 					deliverydate=date.toString();
 				}
-				String discounted_price = Double.toString(Double.parseDouble(price)*(1-Double.parseDouble(discount)/100));
+				String discounted_price = Double.toString(moneyToDouble(price)*(1-Double.parseDouble(discount)/100));
 				String packageid = rs.getString(7);
 				Integer orderid = rs.getInt(8);
 				ArrayList<String> packg = new ArrayList<String>();
