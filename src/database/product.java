@@ -30,7 +30,7 @@ public class product {
 			connection = getConnection();
 			PreparedStatement pstmt,pstmt1;
 			pstmt = connection.prepareStatement("select * from productdescription "
-					+ "where id>=? and id<=?");
+					+ "where productID>=? and productID<=?");
 			pstmt.setInt(1, id);
 			pstmt.setInt(2, id+10);
 			
@@ -64,7 +64,7 @@ public class product {
 		try{
 			connection = getConnection();
 			PreparedStatement pstmt;
-			pstmt = connection.prepareStatement("select max(id) from productDescription");
+			pstmt = connection.prepareStatement("select max(productID) from productDescription");
 			ResultSet rs = pstmt.executeQuery();
 			num  = rs.getInt(1);
 			
@@ -218,11 +218,11 @@ public class product {
 			while(rs.next()){
 				ArrayList<String> item= new ArrayList<String>();
 				String productName, discounted_price, cartquantity, price, discount, productid, sellerid;
-				productName = rs.getString(7);
+				productName = rs.getString(6);
 				price = rs.getString(3);
 				discount = rs.getString(5);
 				discounted_price = Double.toString(moneyToDouble(price)*(1-Double.parseDouble(discount)/100));
-				cartquantity = rs.getString(11);
+				cartquantity = rs.getString(10);
 				productid=rs.getString(1);
 				sellerid=rs.getString(2);
 				
