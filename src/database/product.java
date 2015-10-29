@@ -127,7 +127,7 @@ public class product {
 			connection = getConnection();
 			PreparedStatement pstmt;
 			System.out.println(productID);
-			pstmt = connection.prepareStatement("select seller.name, price,discount, username from product natural join seller where productID=?");
+			pstmt = connection.prepareStatement("select seller.name, price,discount, username from product inner join seller ON (seller.username = sellerid)where productID=?");
 			pstmt.setInt(1, Integer.parseInt(productID));
 			
 			ResultSet rs = pstmt.executeQuery();
@@ -156,6 +156,7 @@ public class product {
 			
 		}catch(SQLException sqle){
 			System.out.println("SQL exception during getSellers");
+			System.out.println(sqle);
 		} finally{
 			closeConnection(connection);
 		}
