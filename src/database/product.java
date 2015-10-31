@@ -473,6 +473,9 @@ public class product {
 			pstmt.setString(4, review);
 			pstmt.executeUpdate();
 			
+			pstmt = connection.prepareStatement("with productID(productid) as (select productid from package natural join productreview where packageId = ?) update productdescription set rating = (select avg(rating) from productreview natural join package where productid = (productID.productid)) from productID where productdescription.productid=(productID.productid);");
+			pstmt.setInt(1, packageId);
+			pstmt.executeUpdate();
 			
 		}catch(SQLException sqle){
 			System.out.println("SQL exception during insertOrder");
