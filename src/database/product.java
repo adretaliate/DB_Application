@@ -98,6 +98,34 @@ public class product {
 		
 	}
 	
+	public static boolean checkProductQuantity(String productid,Integer quantity){
+		boolean check=true;
+		Connection connection=null;
+		try{
+			connection = getConnection();
+			PreparedStatement pstmt;
+			pstmt = connection.prepareStatement("select quantity from product where productid=?");
+			pstmt.setInt(1, Integer.parseInt(productid));
+			ResultSet rs = pstmt.executeQuery();
+			Integer result=0;
+			while(rs.next()){
+				result=rs.getInt(1);
+			}
+			if(result > quantity){
+				check = true;
+			}
+			else{
+				check = false;
+			}
+		}catch(SQLException sqle){
+			System.out.println("SQL exception during getMaxOrderId");
+		} finally{
+			closeConnection(connection);
+		}
+		return check;
+		
+	}
+	
 	public static Integer getMaxOrderId()
 	{
 		Integer num=0;
@@ -483,6 +511,80 @@ public class product {
 		} finally{
 			closeConnection(connection);
 		}
+		
+	}
+	
+	public static ArrayList<ArrayList<String> > getReview(String productID){
+		ArrayList<ArrayList<String>> totalReview = new ArrayList<ArrayList<String>>();
+		Connection connection =null;
+		try{
+			connection = getConnection();
+			PreparedStatement pstmt;
+			System.out.println(productID);
+			pstmt = connection.prepareStatement(" select username,rating,review from (select customerid,rating,review from  productreview natural join package where productid = ?) as temp  inner join usr on (temp.customerid=usr.username);");
+			pstmt.setInt(1, Integer.parseInt(productID));
+			
+			ResultSet rs = pstmt.executeQuery();
+			System.out.println(productID);
+			while(rs.next())
+			{
+				ArrayList<String> review= new ArrayList<String>();
+				String customer,rating,description;
+				customer = rs.getString(1);
+				rating = rs.getString(2);
+				description = rs.getString(3);
+				System.out.println(customer);
+				
+				review.add(customer);
+				review.add(rating);
+				review.add(description);
+		
+				
+				totalReview.add(review);
+				
+			}
+			
+		}catch(SQLException sqle){
+			System.out.println("SQL exception during getSellers");
+			System.out.println(sqle);
+		} finally{
+			closeConnection(connection);
+		}
+		return totalReview;
+		
+	}
+	
+	public static ArrayList<String> getFeaturesAndRating(String productID){
+		ArrayList<String> totalReview = new ArrayList<String>();
+		Connection connection =null;
+		try{
+			connection = getConnection();
+			PreparedStatement pstmt;
+			System.out.println(productID);
+			pstmt = connection.prepareStatement("select features,rating from productdescription where productid = ?;");
+			pstmt.setInt(1, Integer.parseInt(productID));
+			
+			ResultSet rs = pstmt.executeQuery();
+			System.out.println(productID);
+			while(rs.next())
+			{
+		
+				String features,rating;
+				features = rs.getString(1);
+				rating = rs.getString(2);
+				
+				totalReview.add(features);
+				totalReview.add(rating);
+				System.out.println(totalReview.get(1));
+			}
+			
+		}catch(SQLException sqle){
+			System.out.println("SQL exception during getSellers");
+			System.out.println(sqle);
+		} finally{
+			closeConnection(connection);
+		}
+		return totalReview;
 		
 	}
 	
