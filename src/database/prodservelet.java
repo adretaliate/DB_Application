@@ -143,6 +143,7 @@ public class prodservelet extends HttpServlet {
 			String delete=request.getParameter("delete");
 			Cookie[] cookies = request.getCookies();
 			String username=null;
+			PrintWriter out = response.getWriter();
 			if(cookies!=null){
 				for(Cookie cookie:cookies){
 					if(cookie.getName().equals("username")){
@@ -158,13 +159,21 @@ public class prodservelet extends HttpServlet {
 			else if(edit!=null){
 				String[] split = edit.split(" ");
 				String quantity = request.getParameter(edit);
-				if(Integer.parseInt(quantity)!=0){
-					product.updateCart(username, split[1], split[0], Integer.parseInt(quantity));
+				if(!product.checkProductQuantity(split[0], Integer.parseInt(quantity))){
+					RequestDispatcher rd = getServletContext().getRequestDispatcher("/cart.jsp");
+		            out = response.getWriter();
+		            out.println("<html><center><font color=red>Seller doesn't have the requested number of items</font></center></html>\n");
+		            rd.include(request, response);
 				}
 				else{
-					product.delete(username, split[1], split[0]);	
+					if(Integer.parseInt(quantity)!=0){
+						product.updateCart(username, split[1], split[0], Integer.parseInt(quantity));
+					}
+					else{
+						product.delete(username, split[1], split[0]);	
+					}
+					response.sendRedirect("cart.jsp");
 				}
-				response.sendRedirect("cart.jsp");
 			}
 		}
 		
