@@ -48,7 +48,7 @@ public class login {
 		return true;
 	}
 	public static void register(String name, String username, String email, String address,
-			Integer contact, String password, String option){
+			String contact, String password, String option){
 		Connection connection=null;
 		System.out.println("Came here1");
 		System.out.println(name+username+email+address+contact+password);
@@ -60,13 +60,13 @@ public class login {
 			if(option.equals("customer")){
 				System.out.println("Came here");
 				pstmt = connection.prepareStatement("insert into usr "
-						+ "values (?, ?, ?, ?, ?, ?);");
+						+ "values (?, ?, ?, ?, cast(? as numeric(12,0)), ?);");
 				System.out.println("Came here");
 				pstmt.setString(1, name);
 				pstmt.setString(2, username);
 				pstmt.setString(3, email);
 				pstmt.setString(4, address);
-				pstmt.setInt(5, contact);
+				pstmt.setString(5, contact);
 				pstmt.setString(6, password);
 				System.out.println("Came here");
 				pstmt.executeUpdate();
@@ -74,18 +74,19 @@ public class login {
 			}
 			else if(option.equals("seller")){
 				pstmt = connection.prepareStatement("insert into seller "
-						+ "values (?, ?, ?, ?, ?, ?);");
+						+ "values (?, ?, ?, ?, cast(? as numeric(12,0)), ?);");
 				pstmt.setString(1, name);
 				pstmt.setString(2, username);
 				pstmt.setString(3, email);
 				pstmt.setString(4, address);
-				pstmt.setInt(5, contact);;
+				pstmt.setString(5, contact);;
 				pstmt.setString(6, password);
 				pstmt.executeQuery();
 			}
 			
 		} catch(SQLException sqle){
 			System.out.println("SQL exception during registration");
+			System.out.println(sqle);
 		} finally{
 			System.out.println("Came here1");
 			closeConnection(connection);

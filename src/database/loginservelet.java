@@ -64,10 +64,11 @@ public class loginservelet extends HttpServlet {
 			if(username!=null && !username.isEmpty() && option!=null && name!=null && address!=null && password!=null && !name.isEmpty() && !address.isEmpty() && !password.isEmpty()){
 				userexists=login.userexists(username, option);
 				if(!userexists){
-					if(isInteger(contact)){
-						Integer con=Integer.parseInt(contact);
+					if(contact.matches("[0-9]+") && contact.length()<=11 && contact.length()>=10){
+						//Integer con=Integer.parseInt(contact);
+						
 						if(password.equals(repassword)){
-							login.register(name, username, email, address, con, password, option);
+							login.register(name, username, email, address, contact, password, option);
 							RequestDispatcher rd = getServletContext().getRequestDispatcher("/loginpage.jsp");
 				            out = response.getWriter();
 				            out.println("<html><center><font color=red>New User successfully registered</font></center></html>\n");
