@@ -31,25 +31,29 @@ HashMap<Integer, Boolean> review = product.checkReview(username);
 System.out.println("functions are correct");
 %>
 <form action="prodservelet?action=review" method="post">
-<%
-
+<table width="700">
+<tr><td align="center"><b>OrderID</b></td><td align="center"><b>Order Date</b></td><td align="center"><b>Product Name</b>
+</td><td align="center"><b>Quantity</b><td align="center"><b>Price</b></td><td align="center"><b>Current Location</b></td><td align="center"><b>Give Rating</b></td></td>
+<td align="center"><b>Write Review</b></td></tr>
+<% 
 for(Integer orderID: orders.keySet()){
 	System.out.println(orderID);
-	%><table width="700"><tr><td><b>OrderID: <%=orderID %></td><td><b>OrderDate: <%=date.get(orderID) %></td></td></tr><%
+	%><tr><td align="center"><%=orderID %></td><td align="center"><%=date.get(orderID)%></td><%
 	for(List<String> pack: orders.get(orderID)){
 		System.out.println(orderID);
-		%><tr><td><%=pack.get(0)%></td><td><%=pack.get(1)%></td><td><%=pack.get(2)%></td><td><%=pack.get(3)%></td><%
-				System.out.println(orderID);
-				System.out.println(pack.get(4));
-				System.out.println(review.get(1));
-				if(!review.get(Integer.parseInt(pack.get(4))) && pack.get(3).equals("Delivered")){
+		System.out.println(pack.get(4));
+		System.out.println(review.get(1));
+		if(!review.get(Integer.parseInt(pack.get(4))) && pack.get(3).equals("Delivered")){
 					System.out.println(orderID);
-					%><td><input type="number" name="rating<%= pack.get(4)%>" min="1" max="5" value="Write a review"></td><td><input type="text" name="<%= pack.get(4)%>" maxlength="100" value="Write a review"></td><td><button type="submit" name="review" value="<%=pack.get(4)%>">Edit item</button></td><%
-				}
+					 %><td align="center"><%=pack.get(0)%></td><td align="center"><%=pack.get(1)%></td><td align="center"><%=pack.get(2)%></td><td align="center"><%=pack.get(3)%></td><td><input type="number" name="rating<%= pack.get(4)%>" min="1" max="5" value="Write a review"></td><td><input type="text" name="<%= pack.get(4)%>" maxlength="100" value="Write a review"></td><td><button type="submit" name="review" value="<%=pack.get(4)%>">Edit item</button></td></tr><%
+			}
+		else{
+			%><td align="center"><%=pack.get(0)%></td><td align="center"><%=pack.get(1)%></td><td align="center"><%=pack.get(2)%></td><td align="center"><%=pack.get(3)%></td></tr><%
+		}
 	}
-	%></table><%
 }
 %>
+</table>
 </form>
 <a href="loginsuccess.jsp">Go to Item page</a>
 </center>
