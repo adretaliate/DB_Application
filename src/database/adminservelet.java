@@ -105,7 +105,24 @@ public class adminservelet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		String action = request.getParameter("action");
+		if(action.equals("approve_or_reject")){
+			String reject = request.getParameter("reject");
+			String approve = request.getParameter("approve");
+			if(reject!=null){
+				System.out.println(reject);
+				admin.deleteApprove(reject);
+				response.sendRedirect("admin.jsp");
+			}
+			if(approve!=null){
+				System.out.println("came here 3");
+				String[] split = approve.split(" ");
+				System.out.println(split[0] + split[1] + split[2]);
+				String discount = request.getParameter(approve);
+				admin.approve(split[0], split[1], split[2], discount, split[3]);
+				response.sendRedirect("admin.jsp");
+			}
+		}
 	}
 
 }
