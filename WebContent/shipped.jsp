@@ -30,12 +30,11 @@ if(cookies!=null){
 <%
 	ArrayList<ArrayList<String>> packs = transporter.getShippedProducts(username);
 	%>
-	<table width="700"><tr><td><b>Product Name</b></td><td><b>Price</b></td><td><b>Quantity</b></td></tr>
+	<table width="700"><tr><td><b>OrderID</td><td><b>Product Name</td><td><b>Quantity</td><td><b>Address</td><td><b>CurrentLocation</td><td><b>CustomerName</td><td><b>CustomerContact</td></tr>
 	
 	<%
 	for(ArrayList<String> pack : packs){
-	%><tr><td><%=pack.get(0)%></td><td><%=pack.get(1)%></td><td><%=pack.get(2)%></td> <%
-			
+	%><tr><td><%=pack.get(7)%></td><td><%=pack.get(0)%></td><td><%=pack.get(1)%></td><td><%=pack.get(2)%></td> <td><%=pack.get(3)%></td><td><%=pack.get(5)%></td><td><%=pack.get(6)%></td></tr><%															
 	}
 
 %>

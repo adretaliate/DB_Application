@@ -43,13 +43,26 @@ public class transporter {
 		try{
 			connection = getConnection();
 			PreparedStatement pstmt;
-			pstmt = connection.prepareStatement("update package set currentlocation = ? where packageid = ?");
-			pstmt.setString(1, newlocation);
-			pstmt.setInt(2, Integer.parseInt(packageid));
-			pstmt.executeUpdate();
+			pstmt = connection.prepareStatement("select usr.address from package natural join orders inner join usr ON (usr.username = orders.customerID) where packageid=?;");
+			pstmt.setInt(1, Integer.parseInt(packageid));
+			ResultSet rs = pstmt.executeQuery();
+			String address=null;
+			if(rs.next()){
+				address=rs.getString(1);
+			}
+			if(address.equals(newlocation)){
+				delivered(packageid);
+			}
+			else{
+				pstmt = connection.prepareStatement("update package set currentlocation = ? where packageid = ?");
+				pstmt.setString(1, newlocation);
+				pstmt.setInt(2, Integer.parseInt(packageid));
+				pstmt.executeUpdate();
+			}
 			
 		}catch(SQLException sqle){
 			System.out.println("SQL exception during newlocation");
+			System.out.println(sqle);
 		} finally{
 			closeConnection(connection);
 		}
@@ -61,26 +74,34 @@ public class transporter {
 		try{
 			connection = getConnection();
 			PreparedStatement pstmt;
-			pstmt = connection.prepareStatement(" select productdescription.name, package.packagequantity, seller.address, package.currentlocation, "
-					+ "packageID from productdescription natural join package inner join seller ON (seller.username = package.sellerID) "
-					+ "where transportationid = ? and package.deliverydate is null;");
+			pstmt = connection.prepareStatement(" select productdescription.name, package.packagequantity, seller.address, "
+					+ "package.currentlocation,packageID,usr.name,usr.contact, orders.orderid from productdescription natural join "
+					+ "orders natural join package inner join seller ON (seller.username = package.sellerID) inner "
+					+ "join usr ON (usr.username = orders.customerID) where transportationid = ? and "
+					+ "package.deliverydate is null;");
 			pstmt.setString(1, username);
 			ResultSet rs = pstmt.executeQuery();
 			
 			while(rs.next()){
 				ArrayList<String> pack= new ArrayList<String>();
-				String productName, quantity, address, currentlocation, packageid;
+				String productName, quantity, address, currentlocation, packageid, usrname, usrcontact, orderid;
 				productName = rs.getString(1);
 				quantity = rs.getString(2);
 				address = rs.getString(3);
 				currentlocation = rs.getString(4);
 				packageid = rs.getString(5);
+				usrname = rs.getString(6);
+				usrcontact = rs.getString(7);
+				orderid = rs.getString(8);
 				
 				pack.add(productName);
 				pack.add(quantity);
 				pack.add(address);
 				pack.add(currentlocation);
 				pack.add(packageid);
+				pack.add(usrname);
+				pack.add(usrcontact);
+				pack.add(orderid);
 				pendingproducts.add(pack);
 			}
 			
@@ -98,24 +119,34 @@ public class transporter {
 		try{
 			connection = getConnection();
 			PreparedStatement pstmt;
-			pstmt = connection.prepareStatement(" select productdescription.name, package.packagequantity, seller.address, package.currentlocation"
-					+ " from productdescription natural join package inner join seller ON (seller.username = package.sellerID) "
-					+ "where transportationid = ? and package.deliverydate is not null;");
+			pstmt = connection.prepareStatement(" select productdescription.name, package.packagequantity, seller.address, "
+					+ "package.currentlocation,packageID,usr.name,usr.contact, orders.orderid from productdescription natural join "
+					+ "orders natural join package inner join seller ON (seller.username = package.sellerID) inner "
+					+ "join usr ON (usr.username = orders.customerID) where transportationid = ? and "
+					+ "package.deliverydate is not null;");
 			pstmt.setString(1, username);
 			ResultSet rs = pstmt.executeQuery();
 			
 			while(rs.next()){
 				ArrayList<String> pack= new ArrayList<String>();
-				String productName, quantity, address, currentlocation;
+				String productName, quantity, address, currentlocation, packageid, usrname, usrcontact, orderid;
 				productName = rs.getString(1);
 				quantity = rs.getString(2);
 				address = rs.getString(3);
 				currentlocation = rs.getString(4);
+				packageid = rs.getString(5);
+				usrname = rs.getString(6);
+				usrcontact = rs.getString(7);
+				orderid = rs.getString(8);
 				
 				pack.add(productName);
 				pack.add(quantity);
 				pack.add(address);
 				pack.add(currentlocation);
+				pack.add(packageid);
+				pack.add(usrname);
+				pack.add(usrcontact);
+				pack.add(orderid);
 				shippedproducts.add(pack);
 			}
 			
