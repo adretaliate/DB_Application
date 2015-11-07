@@ -74,13 +74,17 @@ public class transporter {
 		try{
 			connection = getConnection();
 			PreparedStatement pstmt;
-			pstmt = connection.prepareStatement(" select productdescription.name, package.packagequantity, seller.address, package.currentlocation,packageID,usr.name,usr.contact from productdescription natural join orders natural join package inner join seller ON (seller.username = package.sellerID) inner join usr ON (usr.username = orders.customerID) where transportationid = ? and package.deliverydate is null;");
+			pstmt = connection.prepareStatement(" select productdescription.name, package.packagequantity, seller.address, "
+					+ "package.currentlocation,packageID,usr.name,usr.contact, orders.orderid from productdescription natural join "
+					+ "orders natural join package inner join seller ON (seller.username = package.sellerID) inner "
+					+ "join usr ON (usr.username = orders.customerID) where transportationid = ? and "
+					+ "package.deliverydate is null;");
 			pstmt.setString(1, username);
 			ResultSet rs = pstmt.executeQuery();
 			
 			while(rs.next()){
 				ArrayList<String> pack= new ArrayList<String>();
-				String productName, quantity, address, currentlocation, packageid, usrname, usrcontact;
+				String productName, quantity, address, currentlocation, packageid, usrname, usrcontact, orderid;
 				productName = rs.getString(1);
 				quantity = rs.getString(2);
 				address = rs.getString(3);
@@ -88,6 +92,7 @@ public class transporter {
 				packageid = rs.getString(5);
 				usrname = rs.getString(6);
 				usrcontact = rs.getString(7);
+				orderid = rs.getString(8);
 				
 				pack.add(productName);
 				pack.add(quantity);
@@ -96,6 +101,7 @@ public class transporter {
 				pack.add(packageid);
 				pack.add(usrname);
 				pack.add(usrcontact);
+				pack.add(orderid);
 				pendingproducts.add(pack);
 			}
 			
@@ -113,24 +119,34 @@ public class transporter {
 		try{
 			connection = getConnection();
 			PreparedStatement pstmt;
-			pstmt = connection.prepareStatement(" select productdescription.name, package.packagequantity, seller.address, package.currentlocation"
-					+ " from productdescription natural join package inner join seller ON (seller.username = package.sellerID) "
-					+ "where transportationid = ? and package.deliverydate is not null;");
+			pstmt = connection.prepareStatement(" select productdescription.name, package.packagequantity, seller.address, "
+					+ "package.currentlocation,packageID,usr.name,usr.contact, orders.orderid from productdescription natural join "
+					+ "orders natural join package inner join seller ON (seller.username = package.sellerID) inner "
+					+ "join usr ON (usr.username = orders.customerID) where transportationid = ? and "
+					+ "package.deliverydate is not null;");
 			pstmt.setString(1, username);
 			ResultSet rs = pstmt.executeQuery();
 			
 			while(rs.next()){
 				ArrayList<String> pack= new ArrayList<String>();
-				String productName, quantity, address, currentlocation;
+				String productName, quantity, address, currentlocation, packageid, usrname, usrcontact, orderid;
 				productName = rs.getString(1);
 				quantity = rs.getString(2);
 				address = rs.getString(3);
 				currentlocation = rs.getString(4);
+				packageid = rs.getString(5);
+				usrname = rs.getString(6);
+				usrcontact = rs.getString(7);
+				orderid = rs.getString(8);
 				
 				pack.add(productName);
 				pack.add(quantity);
 				pack.add(address);
 				pack.add(currentlocation);
+				pack.add(packageid);
+				pack.add(usrname);
+				pack.add(usrcontact);
+				pack.add(orderid);
 				shippedproducts.add(pack);
 			}
 			
