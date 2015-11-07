@@ -59,6 +59,11 @@ public class prodservelet extends HttpServlet {
 						cookie.setMaxAge(0);
 						response.addCookie(cookie);
 					}
+					if(cookie.getName().equals("type")){
+						cookie.setMaxAge(0);
+						cookie.setValue(null);
+						response.addCookie(cookie);
+					}
 				}
 			}
 			PrintWriter out=response.getWriter();
@@ -158,8 +163,10 @@ public class prodservelet extends HttpServlet {
 			}
 			else if(edit!=null){
 				String[] split = edit.split(" ");
+//				System.out.println(split[0]);
+//				System.out.print(split[1]);
 				String quantity = request.getParameter(edit);
-				if(!product.checkProductQuantity(split[0], Integer.parseInt(quantity))){
+				if(!product.checkProductQuantity(split[0],split[1],Integer.parseInt(quantity))){
 					RequestDispatcher rd = getServletContext().getRequestDispatcher("/cart.jsp");
 		            out = response.getWriter();
 		            out.println("<html><center><font color=red>Seller doesn't have the requested number of items</font></center></html>\n");
@@ -188,20 +195,44 @@ public class prodservelet extends HttpServlet {
 					}
 				}
 			}
-			
+			PrintWriter out = response.getWriter();
 			ArrayList<ArrayList<String>> cart = product.getCart(username);
 			Integer curr_packageId = product.getMaxPackageId();
 			Integer curr_orderId = product.getMaxOrderId();
-			
-			for(ArrayList<String> pack : cart)
-			{
-				curr_packageId ++;
-				product.insertPackage(curr_packageId, pack.get(4), Integer.parseInt(pack.get(3)), Integer.parseInt(pack.get(2)) );
-				product.insertOrder(curr_orderId+1, curr_packageId, username);
-				product.delete(username, pack.get(4), pack.get(3));
-				
+			Integer count = 0;
+			for(ArrayList<String> packCheck : cart)
+			{	Integer quantity = Integer.parseInt(packCheck.get(2));
+				System.out.println(quantity);
+				System.out.println(packCheck.get(3));
+				System.out.println(packCheck.get(4));
+				System.out.println(product.checkProductQuantity(packCheck.get(3),packCheck.get(4),quantity));
+				if(product.checkProductQuantity(packCheck.get(3),packCheck.get(4),quantity)){
+				count++;
+				}
+				else{
+					RequestDispatcher rd = getServletContext().getRequestDispatcher("/cart.jsp");
+		            out = response.getWriter();
+		            out.println("<html><center><font color=red>Seller doesn't have the requested number of items for "+packCheck.get(0)+"</font></center></html>\n");
+		            rd.include(request, response);
+				}
+				System.out.println(count);
 			}
-			response.sendRedirect("loginsuccess.jsp");
+			System.out.println("Came in place order");
+			System.out.println(count);
+			System.out.println(cart.size());
+			if(count==cart.size()){
+				for(ArrayList<String> pack : cart)
+				{	
+					curr_packageId ++;
+					product.insertPackage(curr_packageId, pack.get(4), Integer.parseInt(pack.get(3)), Integer.parseInt(pack.get(2)));
+					product.insertOrder(curr_orderId+1, curr_packageId, username);
+					Integer remaining = product.getProductQuantity(pack.get(3), pack.get(4))-Integer.parseInt(pack.get(2));
+					product.delete_remaining(username, pack.get(4), pack.get(3), remaining);
+						
+				}
+				response.sendRedirect("loginsuccess.jsp");
+			}
+			
 			
 		}
 		else if(action.equals("review")){

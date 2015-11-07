@@ -98,14 +98,15 @@ public class product {
 		
 	}
 	
-	public static boolean checkProductQuantity(String productid,Integer quantity){
+	public static boolean checkProductQuantity(String productid,String sellerid,Integer quantity){
 		boolean check=true;
 		Connection connection=null;
 		try{
 			connection = getConnection();
 			PreparedStatement pstmt;
-			pstmt = connection.prepareStatement("select quantity from product where productid=?");
+			pstmt = connection.prepareStatement("select quantity from product where productid=? and sellerid=?");
 			pstmt.setInt(1, Integer.parseInt(productid));
+			pstmt.setString(2, sellerid);
 			ResultSet rs = pstmt.executeQuery();
 			Integer result=0;
 			while(rs.next()){
@@ -123,6 +124,29 @@ public class product {
 			closeConnection(connection);
 		}
 		return check;
+		
+	}
+	
+	public static Integer getProductQuantity(String productid,String sellerid){
+		Integer result=0;
+		Connection connection=null;
+		try{
+			connection = getConnection();
+			PreparedStatement pstmt;
+			pstmt = connection.prepareStatement("select quantity from product where productid=? and sellerid=?");
+			pstmt.setInt(1, Integer.parseInt(productid));
+			pstmt.setString(2, sellerid);
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()){
+				result=rs.getInt(1);
+			}
+			
+		}catch(SQLException sqle){
+			System.out.println("SQL exception during getMaxOrderId");
+		} finally{
+			closeConnection(connection);
+		}
+		return result;
 		
 	}
 	
@@ -155,7 +179,7 @@ public class product {
 			connection = getConnection();
 			PreparedStatement pstmt;
 			System.out.println(productID);
-			pstmt = connection.prepareStatement("select seller.name, price,discount, username from product inner join seller ON (seller.username = sellerid)where productID=?");
+			pstmt = connection.prepareStatement("select seller.name, price,discount, username from product inner join seller ON (seller.username = sellerid)where productID=? order by price asc");
 			pstmt.setInt(1, Integer.parseInt(productID));
 			
 			ResultSet rs = pstmt.executeQuery();
@@ -271,6 +295,34 @@ public class product {
 		return cart;
 	}
  	
+	
+	public static void delete_remaining(String customerID, String sellerID, String productID,Integer remaining){
+		Connection connection =null;
+		try{
+			connection = getConnection();
+			PreparedStatement pstmt;
+			pstmt = connection.prepareStatement("delete from cart where "
+					+ "customerID=? and sellerID=? and productID=?");
+			pstmt.setString(1, customerID);
+			pstmt.setString(2, sellerID);
+			pstmt.setInt(3,Integer.parseInt(productID));
+			pstmt.executeUpdate();
+			
+			pstmt = connection.prepareStatement("update product set "
+					+ "quantity=? where sellerID=? and productID=?");
+			pstmt.setInt(1,remaining);
+			pstmt.setString(2, sellerID);
+			pstmt.setInt(3,Integer.parseInt(productID));
+			pstmt.executeUpdate();
+			
+		}catch(SQLException sqle){
+			System.out.println("SQL exception during delete");
+			System.out.println(sqle);
+		} finally{
+			closeConnection(connection);
+		}
+	}
+	
 	public static void delete(String customerID, String sellerID, String productID){
 		Connection connection =null;
 		try{
