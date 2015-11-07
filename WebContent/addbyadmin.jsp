@@ -4,11 +4,26 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Registration</title>
+<title>Add New Admin/transporter</title>
 </head>
 <body>
 <center>
-<h1>Welcome to eMarket<br>Register Here</h1>
+<%
+String username=null;
+Integer id=0;
+Cookie[] cookies=request.getCookies();
+if(cookies!=null){
+	for(Cookie cookie: cookies){
+		if(cookie.getName().equals("username")){
+			username=cookie.getValue();
+		}
+	}
+}
+%>
+<h1>Welcome to eMarket<br></h1><h2>Add new Admin/transporter</h2>
+<p align="right">Hello, <%=username %>
+&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href="prodservelet?action=logout">Log Out</a></p>
+
 <form action="adminservelet?action=addbyadmin" method="post">
 Your Name:<input type="text" name="name" value=""><br>
 UserName:<input type="text" name="username" value=""><br>
@@ -25,7 +40,7 @@ Register as:
 <br>
 <input type="submit"></input><br>
 </form>
-<a href="loginpage.jsp">Log In Page</a>
+<a href="admin.jsp">Main Page</a>
 </center>
 </body>
 </html>
