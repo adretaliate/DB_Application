@@ -119,8 +119,13 @@ public class loginservelet extends HttpServlet {
 		            response.addCookie(login);
 		            Cookie id = new Cookie("id", "1");
 		            // setting cookie to expiry in 60 mins
-		            login.setMaxAge(60 * 60);
+		            id.setMaxAge(60 * 60);
 		            response.addCookie(id);
+		            
+		            Cookie type = new Cookie("type", option);
+		            type.setMaxAge(60 * 60);
+		            response.addCookie(type);
+		            
 		            if(option.equals("customer")) response.sendRedirect("loginsuccess.jsp");
 		            else if(option.equals("seller")) response.sendRedirect("seller.jsp");
 		            else if(option.equals("transporter")) response.sendRedirect("transporter.jsp");

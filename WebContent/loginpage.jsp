@@ -10,21 +10,33 @@
 <center>
 <h1>Sign In</h1>
 <%
-String username=null;
+String username=null, type=null;
 Cookie[] cookies=request.getCookies();
 if(cookies!=null){
 	for(Cookie cookie: cookies){
 		if(cookie.getName().equals("username")){
 			username=cookie.getValue();
+			cookie.setMaxAge(60*60);
 		}
 		if(cookie.getName().equals("id")){
 			cookie.setValue("1");
+			cookie.setMaxAge(60*60);
+		}
+		if(cookie.getName().equals("type")){
+			type = cookie.getValue();
+			cookie.setMaxAge(60*60);
 		}
 	}
 }
 if(username!=null){
-	System.out.println("came to if");
+	if(type.equals("customer"))
 	%><jsp:forward page = "loginsuccess.jsp" /><%
+	if(type.equals("seller"))
+	%><jsp:forward page = "seller.jsp" /><%
+	if(type.equals("transporter"))
+	%><jsp:forward page = "transporter.jsp" /><%
+	if(type.equals("admin"))
+	%><jsp:forward page = "admin.jsp" /><%
 }
 else{
 	System.out.println("came to else");
