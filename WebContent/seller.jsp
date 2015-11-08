@@ -25,7 +25,7 @@ if(cookies!=null){
 	}
 }
 if(username==null){
-	%><jsp:forward page = "loginsuccess.jsp" /><%
+	%><jsp:forward page = "loginpage.jsp" /><%
 }
 %>
 <h1>Welcome to eMarket</h1><p align="right">Hello, <%=username %>
@@ -40,7 +40,7 @@ ArrayList<ArrayList<String>> prods= seller.getProducts(username);
 <%
 for(ArrayList<String> prod : prods){
 	System.out.println(seller.moneyToDouble(prod.get(2)).toString());
-%><tr><td><a href="sellerProduct.jsp?prodid='<%=prod.get(0)%>'"><%=prod.get(1)%></a></td><td><%=prod.get(2)%></td> <td><%=prod.get(3)%></td> <td><input type="number" min="0" name="price=<%=prod.get(0)%>" value="<%=seller.moneyToDouble(prod.get(2)).toString()%>"></td><td><input type="number" min="0" max="100" name="quantity=<%=prod.get(0)%>" value="<%=prod.get(3)%>" maxlength="3"></td><td><button type="submit" name="edit" value="<%=prod.get(0)%>">Edit stock</button></td></tr><%
+%><tr><td><%=prod.get(1)%></td><td><%=prod.get(2)%></td> <td><%=prod.get(3)%></td> <td><input type="number" min="0" name="price=<%=prod.get(0)%>" value="<%=seller.moneyToDouble(prod.get(2)).toString()%>"></td><td><input type="number" min="0" max="100" name="quantity=<%=prod.get(0)%>" value="<%=prod.get(3)%>" maxlength="3"></td><td><button type="submit" name="edit" value="<%=prod.get(0)%>">Edit stock</button></td></tr><%
 		
 }
 

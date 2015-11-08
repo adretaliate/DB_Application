@@ -16,7 +16,7 @@ if(cookies!=null){
 	}
 }
 if(username==null){
-	%><jsp:forward page = "loginsuccess.jsp" /><%
+	%><jsp:forward page = "loginpage.jsp" /><%
 }
 %>
 <center><h1>Welcome to eMarket</h1></center><p align="right">Hello, UserName
