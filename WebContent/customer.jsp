@@ -15,7 +15,7 @@ if(cookies!=null){
 		username=cookie.getValue();
 	}
 }
-if(username!=null){
+if(username==null){
 	%><jsp:forward page = "loginsuccess.jsp" /><%
 }
 %>

@@ -19,7 +19,7 @@ if(cookies!=null){
 		}
 	}
 }
-if(username!=null){
+if(username==null){
 	%><jsp:forward page = "loginsuccess.jsp" /><%
 }
 %>
