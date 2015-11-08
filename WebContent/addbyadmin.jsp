@@ -19,6 +19,9 @@ if(cookies!=null){
 		}
 	}
 }
+if(username!=null){
+	%><jsp:forward page = "loginsuccess.jsp" /><%
+}
 %>
 <h1>Welcome to eMarket<br></h1><h2>Add new Admin/transporter</h2>
 <p align="right">Hello, <%=username %>

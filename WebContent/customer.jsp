@@ -15,6 +15,9 @@ if(cookies!=null){
 		username=cookie.getValue();
 	}
 }
+if(username!=null){
+	%><jsp:forward page = "loginsuccess.jsp" /><%
+}
 %>
 <center><h1>Welcome to eMarket</h1></center><p align="right">Hello, UserName
 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href="www.google.com" >Your Orders</a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href="www.google.com" >Log Out</a></p>

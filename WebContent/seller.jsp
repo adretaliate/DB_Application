@@ -24,6 +24,9 @@ if(cookies!=null){
 		}
 	}
 }
+if(username!=null){
+	%><jsp:forward page = "loginsuccess.jsp" /><%
+}
 %>
 <h1>Welcome to eMarket</h1><p align="right">Hello, <%=username %>
 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href="addNewItem.jsp" >Add New Item</a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href="sellerServlet?action=logout">Log Out</a></p>
