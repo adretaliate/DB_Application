@@ -24,13 +24,13 @@ public class product {
 	
 	public static ArrayList<ArrayList<String>> products(Integer id){
 		ArrayList<ArrayList<String>> prods = new ArrayList<ArrayList<String>>();
-		
+		System.out.println(Integer.toString(id)+"id");
 		Connection connection=null;
 		try{
 			connection = getConnection();
 			PreparedStatement pstmt,pstmt1;
 			pstmt = connection.prepareStatement("select * from productdescription "
-					+ "where productID>=? and productID<=?");
+					+ "where productID>=? and productID<?");
 			pstmt.setInt(1, id);
 			pstmt.setInt(2, id+10);
 			
@@ -66,6 +66,7 @@ public class product {
 			PreparedStatement pstmt;
 			pstmt = connection.prepareStatement("select max(productID) from productDescription");
 			ResultSet rs = pstmt.executeQuery();
+			if(rs.next())
 			num  = rs.getInt(1);
 			
 		}catch(SQLException sqle){

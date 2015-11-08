@@ -99,8 +99,10 @@ public class prodservelet extends HttpServlet {
 					if(cookie.getName().equals("id")){
 						Integer id = Integer.parseInt(cookie.getValue());
 						String newid = String.valueOf(id+10);
+						System.out.println(newid);
 						Integer check = product.getMaxProductId();
 						if(check > id +10){
+							System.out.println("newid");
 							cookie.setValue(newid);
 							response.addCookie(cookie);
 						}
