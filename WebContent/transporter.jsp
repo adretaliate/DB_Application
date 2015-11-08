@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>Transporter</title>
 </head>
 <body>
 	<center>
@@ -34,7 +34,7 @@ if(username==null){
 <%
 	ArrayList<ArrayList<String>> packs = transporter.getPendingProducts(username);
 	%>
-	<table width="700"><tr><td><b>OrderID</td><td><b>Product Name</td><td><b>Quantity</td><td><b>Address</td><td><b>CurrentLocation</td><td><b>CustomerName</td><td><b>CustomerContact</td></tr>
+	<table width="700"><tr><td><b>OrderID</td><td><b>Product Name</td><td><b>Quantity</td><td><b>SellerAddress</td><td><b>CurrentLocation</td><td><b>CustomerName</td><td><b>CustomerContact</td></tr>
 	
 	<%
 	for(ArrayList<String> pack : packs){
