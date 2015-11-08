@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>Add New Item</title>
 </head>
 <body>
 
@@ -24,6 +24,9 @@ if(cookies!=null){
 			id=Integer.parseInt(cookie.getValue());
 		}
 	}
+}
+if(username==null){
+	%><jsp:forward page = "loginpage.jsp" /><%
 }
 %>
 <h1>Welcome to eMarket</h1><p align="right">Hello, <%=username %>
