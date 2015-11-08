@@ -1,7 +1,12 @@
 package database;
 
 import java.io.IOException;
+
+import javax.mail.*;
+import javax.mail.internet.*;
+import javax.activation.*;
 import java.io.PrintWriter;
+import java.util.Properties;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -147,5 +152,4 @@ public class loginservelet extends HttpServlet {
 			}
 		}
 	}
-
 }

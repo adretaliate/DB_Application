@@ -24,7 +24,7 @@ public class admin {
 					name = rs.getString(1);
 					features = rs.getString(2);
 					sellerid = rs.getString(3);
-					price = rs.getString(4);
+					price = rs.getString(5);
 					quantity = rs.getString(6);
 					String pendingid= rs.getString(7);
 					pstmt = connection.prepareStatement("select name, username, contact from seller where username=?");
@@ -63,7 +63,7 @@ public class admin {
 					}
 					ArrayList<String> prod = new ArrayList<String>();
 					sellerid = rs.getString(3);
-					price = rs.getString(4);
+					price = rs.getString(5);
 					quantity = rs.getString(6);
 					pstmt = connection.prepareStatement("select name, username, contact from seller where username=?");
 					pstmt.setString(1, sellerid);
@@ -83,6 +83,8 @@ public class admin {
 					prod.add(contact);
 					prod.add(productid);
 					prod.add(checknew);
+					String pendingid = rs.getString(7);
+					prod.add(pendingid);
 					
 					approve.add(prod);
 				}
@@ -144,10 +146,12 @@ public class admin {
 	}
 	
 	public static void deleteApprove(String pendingid){
+		System.out.println("Came here1");
 		Connection connection=null;
 		try{
 			System.out.println("Came here1");
 			connection=getConnection();
+			System.out.println("Came here5");
 			PreparedStatement pstmt;
 			
 			pstmt = connection.prepareStatement("delete from ApproveProduct where pendingproductid=cast(? as numeric)");
@@ -213,7 +217,9 @@ public class admin {
 				pstmt.setString(5, username);
 				pstmt.executeUpdate();
 				
-				deleteApprove(pendingid);
+				pstmt = connection.prepareStatement("delete from ApproveProduct where pendingproductid=cast(? as numeric)");
+				pstmt.setString(1, pendingid);
+				pstmt.executeUpdate();
 				
 			}
 			else if(checknew.equals("Y")){
@@ -245,7 +251,9 @@ public class admin {
 				pstmt2.setString(5, username);
 				pstmt2.executeUpdate();
 				
-				deleteApprove(pendingid);
+				pstmt = connection.prepareStatement("delete from ApproveProduct where pendingproductid=cast(? as numeric)");
+				pstmt.setString(1, pendingid);
+				pstmt.executeUpdate();
 			}
 			
 		} catch(SQLException sqle){
