@@ -21,6 +21,7 @@ if(cookies!=null){
 		}
 		if(cookie.getName().equals("id")){
 			id=Integer.parseInt(cookie.getValue());
+			System.out.println(Integer.toString(id)+"id1");
 		}
 	}
 }
